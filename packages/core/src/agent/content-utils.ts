@@ -92,10 +92,12 @@ export function contentPartsToGeminiParts(content: ContentPart[]): Part[] {
         // References are converted to text for the model
         result.push({ text: part.text });
         break;
-      default:
-        // Serialize unknown ContentPart variants instead of dropping them
-        result.push({ text: JSON.stringify(part) });
+      default: {
+        ((x: never) => {
+          throw new Error(`Unhandled ContentPart type: ${JSON.stringify(x)}`);
+        })(part);
         break;
+      }
     }
   }
   return result;
